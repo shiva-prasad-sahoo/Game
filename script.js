@@ -56,7 +56,17 @@ class Game {
   render() {
     this.ctx.clearRect(0, 0, this.width, this.height); // clear old drawings
     this.drawGrid();
-    this.player.draw();
+
+    let intervalId = setInterval(
+      () => {
+        this.player.draw();
+        //this.player.update();
+      },
+
+      100
+    );
+
+    // this.player.draw();
     // this.player.update();
   }
 }

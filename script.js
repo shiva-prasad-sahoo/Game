@@ -8,7 +8,7 @@ class Game {
     this.height;
 
     //player call
-    this.player = new Player(this, 0, 0, 1, 0);
+    this.player = new Keyboard1(this, 0, 0, 0, 0);
 
     //grid making
     this.cellsize = 25;
@@ -50,24 +50,17 @@ class Game {
 
     //called bcoz resize will delete everything
     //so need to call render again
-    this.render();
+    // this.render();  stores nan value in x,y that affect the player animation
+
+    // console.log("resize called");
   }
 
-  render() {
-    this.ctx.clearRect(0, 0, this.width, this.height); // clear old drawings
+  render(deltaTime) {
+    // console.log("render called");
+    // console.log(deltaTime); //to check if dt is updating or not
     this.drawGrid();
-
-    let intervalId = setInterval(
-      () => {
-        this.player.draw();
-        //this.player.update();
-      },
-
-      100
-    );
-
-    // this.player.draw();
-    // this.player.update();
+    this.player.draw();
+    this.player.update(deltaTime);
   }
 }
 
@@ -77,11 +70,18 @@ window.addEventListener("load", () => {
 
   const game = new Game(canvas, ctx);
 
-  function animate() {
+  let lastTime = 0;
+
+  function animate(timestamp) {
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+
+    // console.log(lastTime, deltaTime);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    game.render();
+    game.render(deltaTime);
     window.requestAnimationFrame(animate);
   }
 
-  //   requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 });
